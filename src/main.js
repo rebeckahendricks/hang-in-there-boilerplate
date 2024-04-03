@@ -14,8 +14,11 @@ const buttons = {
   showForm: document.querySelector('.show-form'),
   showMain: document.querySelector('.show-main'),
   showSaved: document.querySelector('.show-saved'),
-  backToMain: document.querySelector('.back-to-main')
+  backToMain: document.querySelector('.back-to-main'),
+  makePoster: document.querySelector('.make-poster')
 }
+
+const newPosterForm = document.getElementById('newPosterForm')
 
 // we've provided you with some data to work with 👇
 var images = [
@@ -119,20 +122,39 @@ var savedPosters = [];
 var currentPoster;
 
 // event listeners go here 👇
-generateNewPoster();
+displayCurrentPoster();
 setupButtonClicks(buttons.showRandom, generateNewPoster);
 setupButtonClicks(buttons.showForm, changeView, posterViews.MAIN, posterViews.FORM)
 setupButtonClicks(buttons.showMain, changeView, posterViews.FORM, posterViews.MAIN)
 setupButtonClicks(buttons.showSaved, changeView, posterViews.MAIN, posterViews.SAVED)
 setupButtonClicks(buttons.backToMain, changeView, posterViews.SAVED, posterViews.MAIN)
 
+newPosterForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  const imageUrl = document.getElementById('poster-image-url').value;
+  const title = document.getElementById('poster-title').value;
+  const quote = document.getElementById('poster-quote').value;
+  
+  currentPoster = createPoster(imageUrl, title, quote);
+  savePoster(currentPoster);
+  changeView(posterViews.FORM, posterViews.MAIN);
+});
+
 // functions and event handlers go here 👇
 // (we've provided two to get you started)!
-function generateNewPoster() {
-  currentPoster = createPoster(getRandomElement(images), getRandomElement(titles), getRandomElement(quotes))
+function displayCurrentPoster() {
+  if (currentPoster == undefined) {
+    currentPoster = createPoster(getRandomElement(images), getRandomElement(titles), getRandomElement(quotes))
+  }
   posterImage.src = currentPoster.imageURL;
   posterTitle.innerText = currentPoster.title;
   posterQuote.innerText = currentPoster.quote;
+}
+
+function generateNewPoster() {
+  currentPoster = createPoster(getRandomElement(images), getRandomElement(titles), getRandomElement(quotes))
+  displayCurrentPoster();
 }
 
 function getRandomElement(array) {
@@ -157,4 +179,9 @@ function setupButtonClicks(button, callback, currentView, newView) {
 function changeView(currentView, newView) {
   currentView.classList.add('hidden');
   newView.classList.remove('hidden');
+  displayCurrentPoster();
+}
+
+function savePoster(poster) {
+  savedPosters.push(poster);
 }
