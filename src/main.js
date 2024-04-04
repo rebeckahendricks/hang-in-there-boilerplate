@@ -132,6 +132,10 @@ setupButtonClicks(buttons.showSaved, changeView, posterViews.MAIN, posterViews.S
 setupButtonClicks(buttons.backToMain, changeView, posterViews.SAVED, posterViews.MAIN)
 setupButtonClicks(buttons.savePoster, savePoster)
 
+setupAttributeChanges(posterImage)
+setupAttributeChanges(posterTitle)
+setupAttributeChanges(posterQuote)
+
 newPosterForm.addEventListener('submit', function(event) {
   event.preventDefault();
   
@@ -239,6 +243,29 @@ function deletePoster(idString) {
   const posterID = parseInt(idString, 10)
   savedPosters = savedPosters.filter(poster => poster.id !== posterID);
 }
+
+function setupAttributeChanges(htmlElement) {
+  htmlElement.addEventListener('click', function() {
+    switch(htmlElement.className) {
+      case 'poster-img':
+        newImage = getRandomElement(images)
+        htmlElement.src = newImage
+        currentPoster.imageURL = newImage
+        break;
+      case 'poster-title':
+        newTitle = getRandomElement(titles)
+        htmlElement.innerText = newTitle
+        currentPoster.title = newTitle
+        break;
+      case 'poster-quote':
+        newQuote = getRandomElement(quotes)
+        htmlElement.innerText = newQuote
+        currentPoster.quote = newQuote
+      default:
+        console.log('Something went wrong');
+    }
+  });
+}git
 
 function showToast(message) {
   const toast = document.createElement('div');
