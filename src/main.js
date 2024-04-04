@@ -138,6 +138,11 @@ newPosterForm.addEventListener('submit', function(event) {
   const imageUrl = document.getElementById('poster-image-url').value;
   const title = document.getElementById('poster-title').value;
   const quote = document.getElementById('poster-quote').value;
+
+  if (!imageUrl || !title || !quote) {
+    alert("Please fill out all fields.");
+    return;
+  }
   
   currentPoster = createPoster(imageUrl, title, quote);
   savePoster();
@@ -197,6 +202,7 @@ function savePoster() {
   );
   
   if (isAlreadySaved) {
+    alert("This poster has already been saved.");
     return
   }
 
@@ -216,6 +222,7 @@ function addPosterToGrid() {
 
   savedPostersGrid.appendChild(poster);
   enablePosterDeletion(poster, poster.id)
+  showToast('Poster saved successfully!')
 }
 
 function enablePosterDeletion(posterElement, posterId) {
@@ -224,6 +231,26 @@ function enablePosterDeletion(posterElement, posterId) {
   });
 }
 
-function deletePoster(id) {
-  document.getElementById(`${id}`).remove();
+function deletePoster(idString) {
+  // Remove from DOM
+  document.getElementById(`${idString}`).remove();
+
+  // Remove from array
+  const posterID = parseInt(idString, 10)
+  savedPosters = savedPosters.filter(poster => poster.id !== posterID);
 }
+
+function showToast(message) {
+  const toast = document.createElement('div');
+  toast.classList.add('toast');
+  toast.textContent = message;
+
+  const container = document.getElementById('toast-container');
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.display = 'none';
+    container.removeChild(toast);
+  }, 5000);
+}
+

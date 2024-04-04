@@ -144,3 +144,26 @@ button:hover {
   margin-bottom: 10px;
   text-transform: uppercase;
 }
+
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.toast {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  animation: fadeOut 3s forwards;
+  animation-delay: 2s;
+}
+
+@keyframes fadeOut {
+  from {opacity: 1;}
+  to {opacity: 0; display: none;}
+}
+
