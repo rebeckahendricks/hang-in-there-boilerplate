@@ -20,6 +20,7 @@ const buttons = {
 }
 
 const newPosterForm = document.getElementById('newPosterForm')
+const savedPostersGrid = document.querySelector('.saved-posters-grid')
 
 // we've provided you with some data to work with 👇
 var images = [
@@ -196,4 +197,17 @@ function savePoster() {
   }
 
   savedPosters.push(currentPoster);
+  addPosterToGrid();
+}
+
+function addPosterToGrid() {
+  const poster = document.createElement('article');
+  poster.classList.add(`poster`)
+  poster.innerHTML = `
+    <img class="poster-img" src="${currentPoster.imageURL}">
+    <h1 class="poster-title">${currentPoster.title}</h1>
+    <h3 class="poster-quote">${currentPoster.quote}</h3>
+  `;
+
+  savedPostersGrid.appendChild(poster);
 }
