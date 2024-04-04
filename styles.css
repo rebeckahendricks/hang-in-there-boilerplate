@@ -152,8 +152,18 @@ button:hover {
   z-index: 1000;
 }
 
-.toast {
+.success-toast {
   background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  animation: fadeOut 3s forwards;
+  animation-delay: 2s;
+}
+
+.error-toast {
+  background-color: red;
   color: white;
   padding: 16px;
   margin-bottom: 20px;

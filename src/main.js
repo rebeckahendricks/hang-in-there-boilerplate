@@ -137,20 +137,7 @@ setupAttributeChanges(posterTitle)
 setupAttributeChanges(posterQuote)
 
 newPosterForm.addEventListener('submit', function(event) {
-  event.preventDefault();
-  
-  const imageUrl = document.getElementById('poster-image-url').value;
-  const title = document.getElementById('poster-title').value;
-  const quote = document.getElementById('poster-quote').value;
-
-  if (!imageUrl || !title || !quote) {
-    alert("Please fill out all fields.");
-    return;
-  }
-  
-  currentPoster = createPoster(imageUrl, title, quote);
-  savePoster();
-  changeView(posterViews.FORM, posterViews.MAIN);
+  submitPosterForm(event);
 });
 
 // functions and event handlers go here 👇
@@ -198,6 +185,23 @@ function changeView(currentView, newView) {
   displayCurrentPoster();
 }
 
+function submitPosterForm(event) {
+  event.preventDefault();
+  
+  const imageUrl = document.getElementById('poster-image-url').value;
+  const title = document.getElementById('poster-title').value;
+  const quote = document.getElementById('poster-quote').value;
+
+  if (!imageUrl || !title || !quote) {
+    alert("Please fill out all fields.");
+    return;
+  }
+  
+  currentPoster = createPoster(imageUrl, title, quote);
+  savePoster();
+  changeView(posterViews.FORM, posterViews.MAIN);
+}
+
 function savePoster() {
   const isAlreadySaved = savedPosters.some(savedPoster => 
     savedPoster.imageURL === currentPoster.imageURL &&
@@ -206,11 +210,12 @@ function savePoster() {
   );
   
   if (isAlreadySaved) {
-    alert("This poster has already been saved.");
+    showToast("This poster has already been saved.", false);
     return
   }
 
-  savedPosters.push(currentPoster);
+  const posterToSave = JSON.parse(JSON.stringify(currentPoster)); //Saves a deep copy of poster
+  savedPosters.push(posterToSave);
   addPosterToGrid();
 }
 
@@ -226,7 +231,7 @@ function addPosterToGrid() {
 
   savedPostersGrid.appendChild(poster);
   enablePosterDeletion(poster, poster.id)
-  showToast('Poster saved successfully!')
+  showToast('Poster saved successfully!', true)
 }
 
 function enablePosterDeletion(posterElement, posterId) {
@@ -261,15 +266,17 @@ function setupAttributeChanges(htmlElement) {
         newQuote = getRandomElement(quotes)
         htmlElement.innerText = newQuote
         currentPoster.quote = newQuote
-      default:
-        console.log('Something went wrong');
     }
   });
-}git
+}
 
-function showToast(message) {
+function showToast(message, isSuccess) {
   const toast = document.createElement('div');
-  toast.classList.add('toast');
+  if (isSuccess) {
+    toast.classList.add('success-toast');
+  } else {
+    toast.classList.add('error-toast');
+  }
   toast.textContent = message;
 
   const container = document.getElementById('toast-container');
