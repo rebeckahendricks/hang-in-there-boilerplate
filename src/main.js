@@ -148,7 +148,7 @@ newPosterForm.addEventListener('submit', function(event) {
 // (we've provided two to get you started)!
 function displayCurrentPoster() {
   if (currentPoster == undefined) {
-    currentPoster = createPoster(getRandomElement(images), getRandomElement(titles), getRandomElement(quotes))
+    currentPoster = randomPoster()
   }
   posterImage.src = currentPoster.imageURL;
   posterTitle.innerText = currentPoster.title;
@@ -156,8 +156,12 @@ function displayCurrentPoster() {
 }
 
 function generateNewPoster() {
-  currentPoster = createPoster(getRandomElement(images), getRandomElement(titles), getRandomElement(quotes))
+  currentPoster = randomPoster()
   displayCurrentPoster();
+}
+
+function randomPoster() {
+  return createPoster(getRandomElement(images), getRandomElement(titles), getRandomElement(quotes))
 }
 
 function getRandomElement(array) {
@@ -202,6 +206,7 @@ function savePoster() {
 
 function addPosterToGrid() {
   const poster = document.createElement('article');
+  poster.id = `${currentPoster.id}`
   poster.classList.add(`poster`)
   poster.innerHTML = `
     <img class="poster-img" src="${currentPoster.imageURL}">
@@ -210,4 +215,15 @@ function addPosterToGrid() {
   `;
 
   savedPostersGrid.appendChild(poster);
+  enablePosterDeletion(poster)
+}
+
+function enablePosterDeletion(poster) {
+  document.getElementById(`${poster.id}`).addEventListener('dblclick', function() {
+    deletePoster(poster.id)
+  });
+}
+
+function deletePoster(id) {
+  document.getElementById(`${id}`).remove();
 }
