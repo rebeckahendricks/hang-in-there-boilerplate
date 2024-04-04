@@ -215,12 +215,12 @@ function addPosterToGrid() {
   `;
 
   savedPostersGrid.appendChild(poster);
-  enablePosterDeletion(poster)
+  enablePosterDeletion(poster, poster.id)
 }
 
-function enablePosterDeletion(poster) {
-  document.getElementById(`${poster.id}`).addEventListener('dblclick', function() {
-    deletePoster(poster.id)
+function enablePosterDeletion(posterElement, posterId) {
+  posterElement.addEventListener('dblclick', function() {
+    deletePoster(posterId)
   });
 }
 
