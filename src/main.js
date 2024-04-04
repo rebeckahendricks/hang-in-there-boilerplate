@@ -15,7 +15,8 @@ const buttons = {
   showMain: document.querySelector('.show-main'),
   showSaved: document.querySelector('.show-saved'),
   backToMain: document.querySelector('.back-to-main'),
-  makePoster: document.querySelector('.make-poster')
+  makePoster: document.querySelector('.make-poster'),
+  savePoster: document.querySelector('.save-poster')
 }
 
 const newPosterForm = document.getElementById('newPosterForm')
@@ -128,6 +129,7 @@ setupButtonClicks(buttons.showForm, changeView, posterViews.MAIN, posterViews.FO
 setupButtonClicks(buttons.showMain, changeView, posterViews.FORM, posterViews.MAIN)
 setupButtonClicks(buttons.showSaved, changeView, posterViews.MAIN, posterViews.SAVED)
 setupButtonClicks(buttons.backToMain, changeView, posterViews.SAVED, posterViews.MAIN)
+setupButtonClicks(buttons.savePoster, savePoster)
 
 newPosterForm.addEventListener('submit', function(event) {
   event.preventDefault();
@@ -137,7 +139,7 @@ newPosterForm.addEventListener('submit', function(event) {
   const quote = document.getElementById('poster-quote').value;
   
   currentPoster = createPoster(imageUrl, title, quote);
-  savePoster(currentPoster);
+  savePoster();
   changeView(posterViews.FORM, posterViews.MAIN);
 });
 
@@ -170,9 +172,9 @@ function createPoster(imageURL, title, quote) {
     quote: quote}
 }
 
-function setupButtonClicks(button, callback, currentView, newView) {
+function setupButtonClicks(button, callback, arg1, arg2) {
   button.addEventListener('click', function() {
-    callback(currentView, newView);
+    callback(arg1, arg2);
   });
 }
 
@@ -182,6 +184,16 @@ function changeView(currentView, newView) {
   displayCurrentPoster();
 }
 
-function savePoster(poster) {
-  savedPosters.push(poster);
+function savePoster() {
+  const isAlreadySaved = savedPosters.some(savedPoster => 
+    savedPoster.imageURL === currentPoster.imageURL &&
+    savedPoster.title === currentPoster.title &&
+    savedPoster.quote === currentPoster.quote
+  );
+  
+  if (isAlreadySaved) {
+    return
+  }
+
+  savedPosters.push(currentPoster);
 }
