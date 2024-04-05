@@ -19,8 +19,8 @@ const buttons = {
   savePoster: document.querySelector('.save-poster')
 }
 
-const newPosterForm = document.getElementById('newPosterForm')
-const savedPostersGrid = document.querySelector('.saved-posters-grid')
+const newPosterForm = document.getElementById('newPosterForm');
+const savedPostersGrid = document.querySelector('.saved-posters-grid');
 
 // we've provided you with some data to work with 👇
 var images = [
@@ -127,15 +127,15 @@ var currentPoster;
 displayCurrentPoster();
 
 setupButtonClicks(buttons.showRandom, generateNewPoster);
-setupButtonClicks(buttons.showForm, changeView, posterViews.MAIN, posterViews.FORM)
-setupButtonClicks(buttons.showMain, changeView, posterViews.FORM, posterViews.MAIN)
-setupButtonClicks(buttons.showSaved, changeView, posterViews.MAIN, posterViews.SAVED)
-setupButtonClicks(buttons.backToMain, changeView, posterViews.SAVED, posterViews.MAIN)
-setupButtonClicks(buttons.savePoster, savePoster)
+setupButtonClicks(buttons.showForm, changeView, posterViews.MAIN, posterViews.FORM);
+setupButtonClicks(buttons.showMain, changeView, posterViews.FORM, posterViews.MAIN);
+setupButtonClicks(buttons.showSaved, changeView, posterViews.MAIN, posterViews.SAVED);
+setupButtonClicks(buttons.backToMain, changeView, posterViews.SAVED, posterViews.MAIN);
+setupButtonClicks(buttons.savePoster, savePoster);
 
-setupAttributeChanges(posterImage)
-setupAttributeChanges(posterTitle)
-setupAttributeChanges(posterQuote)
+setupAttributeChanges(posterImage);
+setupAttributeChanges(posterTitle);
+setupAttributeChanges(posterQuote);
 
 newPosterForm.addEventListener('submit', function(event) {
   submitPosterForm(event);
@@ -145,46 +145,47 @@ newPosterForm.addEventListener('submit', function(event) {
 // (we've provided two to get you started)!
 function displayCurrentPoster() {
   if (currentPoster == undefined) {
-    currentPoster = randomPoster()
+    currentPoster = randomPoster();
   }
   posterImage.src = currentPoster.imageURL;
   posterTitle.innerText = currentPoster.title;
   posterQuote.innerText = currentPoster.quote;
-}
+};
 
 function generateNewPoster() {
-  currentPoster = randomPoster()
+  currentPoster = randomPoster();
   displayCurrentPoster();
-}
+};
 
 function randomPoster() {
-  return createPoster(getRandomElement(images), getRandomElement(titles), getRandomElement(quotes))
-}
+  return createPoster(getRandomElement(images), getRandomElement(titles), getRandomElement(quotes));
+};
 
 function getRandomElement(array) {
   const randomIndex = Math.floor(Math.random() * array.length);
   return array[randomIndex];
-}
+};
 
 function createPoster(imageURL, title, quote) {
   return {
     id: Date.now(), 
     imageURL: imageURL, 
     title: title, 
-    quote: quote}
-}
+    quote: quote
+  };
+};
 
 function setupButtonClicks(button, callback, arg1, arg2) {
   button.addEventListener('click', function() {
     callback(arg1, arg2);
   });
-}
+};
 
 function changeView(currentView, newView) {
   currentView.classList.add('hidden');
   newView.classList.remove('hidden');
   displayCurrentPoster();
-}
+};
 
 function submitPosterForm(event) {
   event.preventDefault();
@@ -196,12 +197,12 @@ function submitPosterForm(event) {
   if (!imageUrl || !title || !quote) {
     alert("Please fill out all fields.");
     return;
-  }
+  };
   
   currentPoster = createPoster(imageUrl, title, quote);
   savePoster();
   changeView(posterViews.FORM, posterViews.MAIN);
-}
+};
 
 function savePoster() {
   const isAlreadySaved = savedPosters.some(savedPoster => 
@@ -212,19 +213,18 @@ function savePoster() {
   
   if (isAlreadySaved) {
     showToast("This poster has already been saved.", false);
-    return
-  }
+    return;
+  };
 
   const posterToSave = JSON.parse(JSON.stringify(currentPoster)); //Saves a deep copy of poster
   savedPosters.push(posterToSave);
   addPosterToGrid();
-}
+};
 
 function addPosterToGrid() {
   const poster = document.createElement('article');
-  poster.id = `${currentPoster.id}`
-  poster.classList.add(`poster`)
-  poster.classList.add(`d-flex`)
+  poster.id = `${currentPoster.id}`;
+  poster.classList.add(`poster`);
   poster.innerHTML = `
     <img class="poster-img" src="${currentPoster.imageURL}">
     <h1 class="poster-title">${currentPoster.title}</h1>
@@ -232,24 +232,24 @@ function addPosterToGrid() {
   `;
 
   savedPostersGrid.appendChild(poster);
-  enablePosterDeletion(poster, poster.id)
-  showToast('Poster saved successfully!', true)
-}
+  enablePosterDeletion(poster, poster.id);
+  showToast('Poster saved successfully!', true);
+};
 
 function enablePosterDeletion(posterElement, posterId) {
   posterElement.addEventListener('dblclick', function() {
-    deletePoster(posterId)
+    deletePoster(posterId);
   });
-}
+};
 
 function deletePoster(idString) {
   // Remove from DOM
   document.getElementById(`${idString}`).remove();
 
   // Remove from array
-  const posterID = parseInt(idString, 10)
+  const posterID = parseInt(idString, 10);
   savedPosters = savedPosters.filter(poster => poster.id !== posterID);
-}
+};
 
 function setupAttributeChanges(htmlElement) {
   htmlElement.addEventListener('click', function() {
@@ -266,10 +266,10 @@ function setupAttributeChanges(htmlElement) {
       htmlElement.innerText = newQuote;
       currentPoster.quote = newQuote;
     } else {
-      return
-    }
+      return;
+    };
   });
-}
+};
 
 
 function showToast(message, isSuccess) {
@@ -278,7 +278,7 @@ function showToast(message, isSuccess) {
     toast.classList.add('success-toast');
   } else {
     toast.classList.add('error-toast');
-  }
+  };
   toast.textContent = message;
 
   const container = document.getElementById('toast-container');
@@ -288,4 +288,4 @@ function showToast(message, isSuccess) {
     toast.style.display = 'none';
     container.removeChild(toast);
   }, 5000);
-}
+};
