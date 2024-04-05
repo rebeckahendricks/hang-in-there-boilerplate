@@ -125,6 +125,7 @@ var currentPoster;
 
 // event listeners go here 👇
 displayCurrentPoster();
+
 setupButtonClicks(buttons.showRandom, generateNewPoster);
 setupButtonClicks(buttons.showForm, changeView, posterViews.MAIN, posterViews.FORM)
 setupButtonClicks(buttons.showMain, changeView, posterViews.FORM, posterViews.MAIN)
@@ -223,6 +224,7 @@ function addPosterToGrid() {
   const poster = document.createElement('article');
   poster.id = `${currentPoster.id}`
   poster.classList.add(`poster`)
+  poster.classList.add(`d-flex`)
   poster.innerHTML = `
     <img class="poster-img" src="${currentPoster.imageURL}">
     <h1 class="poster-title">${currentPoster.title}</h1>
@@ -251,24 +253,24 @@ function deletePoster(idString) {
 
 function setupAttributeChanges(htmlElement) {
   htmlElement.addEventListener('click', function() {
-    switch(htmlElement.className) {
-      case 'poster-img':
-        newImage = getRandomElement(images)
-        htmlElement.src = newImage
-        currentPoster.imageURL = newImage
-        break;
-      case 'poster-title':
-        newTitle = getRandomElement(titles)
-        htmlElement.innerText = newTitle
-        currentPoster.title = newTitle
-        break;
-      case 'poster-quote':
-        newQuote = getRandomElement(quotes)
-        htmlElement.innerText = newQuote
-        currentPoster.quote = newQuote
+    if (htmlElement.className.includes('poster-img')) {
+      const newImage = getRandomElement(images);
+      htmlElement.src = newImage;
+      currentPoster.imageURL = newImage;
+    } else if (htmlElement.className.includes('poster-title')) {
+      const newTitle = getRandomElement(titles);
+      htmlElement.innerText = newTitle;
+      currentPoster.title = newTitle;
+    } else if (htmlElement.className.includes('poster-quote')) {
+      const newQuote = getRandomElement(quotes);
+      htmlElement.innerText = newQuote;
+      currentPoster.quote = newQuote;
+    } else {
+      return
     }
   });
 }
+
 
 function showToast(message, isSuccess) {
   const toast = document.createElement('div');
@@ -287,4 +289,3 @@ function showToast(message, isSuccess) {
     container.removeChild(toast);
   }, 5000);
 }
-
